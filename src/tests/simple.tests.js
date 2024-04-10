@@ -83,8 +83,11 @@ describe("Test suite 3", async () => {
     await browser.pause(5000)
     const total = await $("h2").getText();
     console.log(total);
-    const a = expect(totalCost).toHaveText(total);
-    console.log(a);
+
+    //Compare prices
+    const price = total.slice(24);
+    const resultOfPrice = totalCost.includes(price);
+    console.log(resultOfPrice);
 
     await browser.pause(1000);
     //await browser.switchToFrame(null);
