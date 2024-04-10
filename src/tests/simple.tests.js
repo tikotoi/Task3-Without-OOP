@@ -1,52 +1,93 @@
-import { pages } from "../po/pages/index.js";
-
-describe("Doctors Page", () => {
+describe("Test suite 3", async () => {
   beforeEach(async () => {
-    await pages("dashboard").open();
+    await browser.url("https://cloud.google.com/");
   });
 
-  it("check page title", async () => {
-    await expect(browser).toHaveTitle(
-      "Appointment Planner - Syncfusion Angular Components Showcase App"
-    );
+  it("Google Cloud Pricing Calculator", async () => {
+
+    //Search "Google Cloud Platform Pricing Calculator"
+    await $(".YSM5S").click();
+    await $("#i4").setValue("Google Cloud Platform Pricing Calculator");
+    await $(".google-material-icons.PETVs.PETVs-OWXEXe-UbuQg").click();
+    //await $$(".K5hUy")[1].click();
+    await $("//a[@href='https://cloud.google.com/products/calculator-legacy?hl=es-419']").click();
+
+    //Switch to iframe
+    const iframe = await browser.findElements('css selector', 'iframe')
+    await browser.pause(3000);
+    await browser.switchToFrame(iframe[0]);
+    const iframe1 = await browser.findElements('css selector', 'iframe')
+    await browser.switchToFrame(iframe1[0]);
+
+    await $("#input_100").setValue(4);
+    await $('#select_113').click();
+    await $("#select_option_102").waitForDisplayed();
+    await $("#select_option_102").click();
+    await $("#select_117").click();
+    await $("#select_option_115").click();
+    await $("#select_123").click()
+    await $("#select_option_119").click();
+    await $("#select_125").click();
+    await $("#select_option_224").waitForDisplayed();
+    await $("#select_option_224").click();
+    await $("#select_127").click();
+    await $("#select_option_474").waitForDisplayed();
+    await $("#select_option_474").click();
+
+    // Add GPUs 
+    await $$(".md-container.md-ink-ripple")[2].click();
+    await $("#select_510").click();
+    await $("#select_option_517").waitForDisplayed();
+    await $("#select_option_517").click();
+    await $("#select_512").click();
+    await $("#select_option_520").waitForDisplayed();
+    await $("#select_option_520").click();
+    await $("#select_469").click();
+    await $("#select_option_495").waitForDisplayed();
+    await $("#select_option_495").click();
+    await $("#select_133").click();
+    await $("#select_option_268").waitForDisplayed();
+    await $("#select_option_268").click();
+    await $("#select_140").click();
+    await $("#select_option_138").waitForDisplayed()
+    await $("#select_option_138").click()
+    await $$(".md-raised.md-primary.cpc-button.md-button.md-ink-ripple")[0].waitForDisplayed();
+    await $$(".md-raised.md-primary.cpc-button.md-button.md-ink-ripple")[0].click();
+    await $$(".md-title")[3].waitForDisplayed();
+    const totalCost = await $$(".md-title")[3].getText();
+
+    // Email Estimate
+    await $$(".md-fab.md-primary.md-mini.md-button.md-ink-ripple")[1].waitForDisplayed();
+    await $$(".md-fab.md-primary.md-mini.md-button.md-ink-ripple")[1].click();
+
+    //Generate Email
+    
+    await browser.newWindow('https://email-fake.com/');
+    const  copyMail = await $('#email_ch_text').getText();
+
+    // Add Email to Calculator window 
+    await browser.switchWindow('cloud.google.com/products/calculator-legacy');
+    const iframe0 = await browser.findElements('css selector', 'iframe')
+    await browser.pause(3000);
+    await browser.switchToFrame(iframe0[0]);
+    const iframe2 = await browser.findElements('css selector', 'iframe')
+    await browser.switchToFrame(iframe2[0]);
+    await $("#input_620").waitForDisplayed();
+    await $("#input_620").click();
+    await $("#input_620").setValue(copyMail);
+    await $$(".md-raised.md-primary.cpc-button.md-button.md-ink-ripple")[4].waitForDisplayed();
+    await $$(".md-raised.md-primary.cpc-button.md-button.md-ink-ripple")[4].click();
+  
+    //Get Total price from email
+    await browser.switchWindow("https://email-fake.com")
+    await browser.pause(5000)
+    const total = await $("h2").getText();
+    console.log(total);
+    const a = expect(totalCost).toHaveText(total);
+    console.log(a);
+
+    await browser.pause(1000);
+    //await browser.switchToFrame(null);
   });
 
-  it("Open modal window for adding a new doctor", async () => {
-    await pages("dashboard").sideMenu.item("doctors").click();
-    await pages("doctors").doctorListHeader.addNewDoctorBtn.click();
-    await expect(pages("doctors").addDoctorModal.rootEl).toBeDisplayed();
-  });
-
-  it("Add new doctor", async () => {
-    await pages("dashboard").sideMenu.item("doctors").click();
-    await pages("doctors").doctorListHeader.addNewDoctorBtn.click();
-    await pages("doctors").addDoctorModal.rootEl.waitForDisplayed();
-
-    await pages("doctors").addDoctorModal.input("name").setValue("John Doe");
-    await pages("doctors").addDoctorModal.input("phone").setValue("5984993991");
-    await pages("doctors")
-      .addDoctorModal.input("email")
-      .setValue("tiabu@gmail.com");
-    await pages("doctors").addDoctorModal.input("education").setValue("Master");
-    await pages("doctors").addDoctorModal.input("designation").setValue("Test");
-
-    //await pages('doctors').addDoctorModal.saveBtn.click();
-    await pages("doctors").addDoctorModal.inputBtn("save").click();
-    await expect(pages("doctors").addDoctorModal.rootEl).not.toBeDisplayed();
-    await expect(pages("doctors").specialistCard(8).name).toHaveText(
-      "Dr. John Doe"
-    );
-    await expect(pages("doctors").specialistCard(8).education).toHaveText(
-      "Master",
-      { ignoreCase: true }
-    );
-  });
-
-  it("Close modal window for adding a new doctor", async () => {
-    await pages("dashboard").sideMenu.item("doctors").click();
-    await pages("doctors").doctorListHeader.addNewDoctorBtn.click();
-    await pages("doctors").addDoctorModal.rootEl.waitForDisplayed();
-    await pages("doctors").addDoctorModal.inputBtn("close").click();
-    await expect(pages("doctors").addDoctorModal.rootEl).not.toBeDisplayed();
-  });
 });

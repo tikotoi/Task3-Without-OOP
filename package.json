@@ -1,7 +1,7 @@
 {
-  "name": "wdio_workshop",
+  "name": "task1",
   "version": "0.0.1",
-  "description": "pom with wdio",
+  "description": "First task",
   "private":"true",
   "type": "module",
   "devDependencies": {
